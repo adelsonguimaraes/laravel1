@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\TarefasController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, '__invoke']);
+Route::get('/', [HomeController::class, 'index']);
 Route::view('/teste', 'teste');
+
+Route::get('/login', [LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'authenticate']);
+
+Route::resource('todo', 'TodoController');
+/*
+    Rotas criadas com resource
+    --------------------------
+    GET - /todo - index - todo.index - LISTA OS ITENS
+    GET - /todo/create - create - todo.create - FORM DE CRIAÇÃO
+    POST - /todo - store - todo.store - RECEBER OS DADOS E ADD ITEM
+    GET - /todo/{id} - show - todo.show - ITEM INDIVIDUAL
+    GET - /todo/{id}/edit - edit - todo.edit - FORM DE EDIÇÃO
+    PUT - /todo/{id}/ - update - todo.update - RECEBER OS DADOS E UPDATE ITEM
+    DELETE - /todo/{id} - destroy - todo.destroy - DELETAR O ITEM
+*/
 
 Route::prefix('/tarefas')->group(function() {
     Route::get('/', [TarefasController::class, 'list'])->name('tarefas.list'); // listagem de tarefas
@@ -35,7 +52,7 @@ Route::prefix('/tarefas')->group(function() {
 
 Route::prefix('/config')->group(function () {
 
-    Route::get('/', [ConfigController::class, 'index']);
+    Route::get('/', [ConfigController::class, 'index'])->name('config.index')->middleware('auth');
     Route::post('/', [ConfigController::class, 'index']);
     Route::get('info', [ConfigController::class, 'info']);
     Route::get('permissoes', [ConfigController::class, 'permissoes']);
@@ -45,3 +62,6 @@ Route::prefix('/config')->group(function () {
 Route::fallback(function () {
     return view('404');
 });
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
