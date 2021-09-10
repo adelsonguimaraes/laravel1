@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -40,15 +41,12 @@ class LoginController extends Controller
     }
 
     public function index () {
-        echo "foi aqui";
-        // return view('login');
+        return view('auth.login');
     }
 
     public function authenticate (Request $r) {
         $creds = $r->only(['email', 'password']);
-        var_dump($creds);
-        exit;
-
+        
         if (Auth::attempt($creds)) {
             return redirect()->route('config.index');
         }else{
@@ -56,5 +54,10 @@ class LoginController extends Controller
                 'warning', 'E-mail ou senha inválidos!'
             );
         }
+    }
+
+    public function logout() {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }

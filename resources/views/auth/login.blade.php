@@ -4,8 +4,6 @@
 
 @section('content')
 
-    {{ print_r($_POST) }}
-
     @if(session('warning'))
         @component('components.alert')
             {{session('warning')}}
