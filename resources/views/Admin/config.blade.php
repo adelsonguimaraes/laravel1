@@ -6,7 +6,7 @@
 
 <h1> Configurações </h1>
 
-<a href="/logout">Sair</a>
+Olá {{$nome}} - <a href="/logout">Sair</a>
 
 @component('components.alert')
     @slot('type') ERRO: @endslot
@@ -23,20 +23,22 @@ LISTA DO BOLO:
 </ul>
 
 
+@if($showForm)
+    <form method="POST">
+        @csrf
 
-<form method="POST">
-    @csrf
+        Nome:<br/>
+        <input type="text" name="nome"/> <br/>
 
-    Nome:<br/>
-    <input type="text" name="nome"/> <br/>
+        Idade: <br/>
+        <input type="text" name="idade"/><br/>
 
-    Idade: <br/>
-    <input type="text" name="idade"/><br/>
+        Cidade: <br/>
+        <input type="text" name="cidade"/><br/>
 
-    Cidade: <br/>
-    <input type="text" name="cidade"/><br/>
+        <input type="submit" value="Enviar"/>
 
-    <input type="submit" value="Enviar"/>
+    </form>
+@endif
 
-</form>
 @endsection

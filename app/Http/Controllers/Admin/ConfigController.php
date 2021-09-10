@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ConfigController extends Controller
 {
+
+    public function __construct () {
+        $this->middleware('auth');
+    }
+
     public function index (Request $request) {
-        $nome = "Adelson";
+        $user = Auth::user(); // ou $request->user();
+        $nome = $user->name;
+        
         $idade = 100;
         $cidade = $request->input('cidade');
 
@@ -23,7 +32,8 @@ class ConfigController extends Controller
             "nome" => $nome,
             "idade" => $idade,
             "cidade"=> $cidade,
-            "lista" => $lista
+            "lista" => $lista,
+            "showForm" =>  Gate::allows('see-form')
         ];
         
         return view('admin.config', $data);
